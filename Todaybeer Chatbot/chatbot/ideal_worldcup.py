@@ -46,8 +46,6 @@ class ideal_worldcup():
     def __init__(self):
         self.vocabulary = vocabulary
         self.model = model
-        self.merged_lists = np.array(merged.columns)
-        self.merged = merged
 
     def cosine_sim_most(self, merged_lists, return_value):
         selected = DataFrame(index=[merged], columns=["value"])
@@ -115,7 +113,7 @@ class ideal_worldcup():
 
     # default iteration = 10
     def ideal_choice(self, iteration=2, debug=False):
-        merged_list = self.merged_lists
+        merged_list = np.array(merged.columns)
         tries = 0
         selected_name, return_value = self.first_try(merged_list)
         merged_list = np.delete(merged_list, np.where(merged_list == selected_name)[0][0])

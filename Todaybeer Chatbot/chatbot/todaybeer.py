@@ -47,10 +47,6 @@ class todaybeer():
         self.model = model
         self.model_intention = model_intention
 
-    def softmax(self,x):
-        e_x = np.exp(x - np.max(x))
-        return e_x / e_x.sum(axis=0)
-
     def engine(self, corpus, beer, preference, intention=False):
         ### 문장 판단 부분 ###
         # twitter 형태소 분석기를 통해 사용자가 입력한 문장(corpus)를 형태소 분해하여 tests 리스트에 담아준다.
@@ -81,7 +77,7 @@ class todaybeer():
                 pass
         if self.return_intention == 1:
             return_classes = np.argmax(
-                self.softmax(self.return_classes[0][1] + self.return_classes[0][0]))
+                (self.return_classes[0][1] + 0.00000001) * (self.return_classes[0][0] + 0.00000001))
             if intention:
                 print("감정판단")
             else:
