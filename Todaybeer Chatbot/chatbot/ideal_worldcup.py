@@ -15,11 +15,11 @@ import re
 
 np.set_printoptions(suppress=True)
 
-model = load_model("c:/testbot/chatbot/chatbot-attention_weight.h5")
+model = load_model("chatbot-attention_weight.h5")
 b = model.layers[2].get_weights()
 print("weight load complete")
 
-rawdata = pd.read_csv("c:/testbot/chatbot/beer.csv", engine="python", encoding="cp949")
+rawdata = pd.read_csv("beer.csv", engine="python", encoding="cp949")
 target = rawdata['target']
 text = rawdata["reviews"]
 print('rawdata load complete')
@@ -28,7 +28,7 @@ print('rawdata load complete')
 
 morphsVectored = list()
 
-vocabulary = pd.read_csv("c:/testbot/chatbot/dictionary.csv", engine="python", encoding="cp949")
+vocabulary = pd.read_csv("dictionary.csv", engine="python", encoding="cp949")
 
 vocabulary = vocabulary.to_dict(orient="records")[0]
 print("vocabulary load complete")

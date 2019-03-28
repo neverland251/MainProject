@@ -25,8 +25,8 @@ import numpy as np
 
 print("pandas, numpy load")
 
-model = models.load_model("c:/testbot/chatbot/chatbot-attention.h5")
-model_intention = models.load_model("c:/testbot/chatbot/chatbot-intention.h5")
+model = models.load_model("chatbot-attention.h5")
+model_intention = models.load_model("chatbot-intention.h5")
 model.trainable = False
 model_intention.trainable = False
 model.compile(loss="categorical_crossentropy", optimizer="adam", metrics=["accuracy"])
@@ -36,7 +36,7 @@ graphs = tf.get_default_graph()
 print("model load")
 
 # 단어-숫자 짝으로 이루어져 있는 색인사전을 불러온다.
-vocabulary = pd.read_csv("c:/testbot/chatbot/dictionary.csv", engine="python", encoding="cp949")
+vocabulary = pd.read_csv("dictionary.csv", engine="python", encoding="cp949")
 # DataFrame형태인 색인사전을 검색이 용이하게 딕셔너리로 변환해준다.
 vocabulary = vocabulary.to_dict(orient="records")[0]
 print("vocabulary load")
