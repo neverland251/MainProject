@@ -60,7 +60,6 @@ vocabulary = vocabulary.to_dict(orient="records")[0]
 #원본 데이터셋을 불러온다.
 
 a = pd.read_csv("beer.csv",engine="python",encoding="cp949")
-a = a[a["reviews"].duplicated() == False]
 a = a.reset_index()
 del a["index"]
 
@@ -68,7 +67,14 @@ del a["index"]
 target = a["target"]
 text= a["reviews"]
 
-a.head()
+preprocessing_target_from_target = target.unique()
+for j,i in enumerate(morphs):
+    for k in preprocessing_target_from_target:
+        for l in np.where(np.array(i) == k)[0]:
+            try:
+                del morphs[j][l]
+            except IndexError : 
+                pass
 
 #로드한 토큰화 파일에서, 색인사전을 검색하여 토큰화 문장을 숫자 문장으로 바꿔준다.
 
@@ -82,17 +88,10 @@ for i in morphs:
             temporailyList.append(0)
     morphsVectored.append(temporailyList)
 
-preprocessing_target_from_target = target.unique()
-
-for j,i in enumerate(morphs):
-    for k in preprocessing_target_from_target:
-        for l in np.where(np.array(i) == k)[0]:
-            try:
-                del morphs[j][l]
-            except IndexError : 
-                pass
 
 vectorized_seq = sequence.pad_sequences(morphsVectored,maxlen = 50)
+
+print(len(target))
 
 X_train,X_test,y_train,y_test = train_test_split(vectorized_seq, target)
 
@@ -172,7 +171,7 @@ concat = layers.Concatenate(axis=-1,name = "Concatenate_Decoder_O_and_Context_Ve
 Feed_forward = layers.Dense(512,activation = "tanh",name="Feed_forward")
 finally_output = Feed_forward(concat)
 
-predicts = layers.Dense(22,activation="softmax")(finally_output)
+predicts = layers.Dense(21,activation="softmax")(finally_output)
 
 GRUs = Model(inputs = [inputs,inputs_d], outputs = [predicts])
 GRUs.summary()
@@ -183,7 +182,7 @@ early_stopping = EarlyStopping(patience = 3)
 
 GRUs.compile(loss="categorical_crossentropy",optimizer="adam",metrics=["accuracy"])
 
-GRUs.fit([X_train,zero_pad_train],y_train,epochs=5,batch_size = 64,validation_data = ([X_test,zero_pad_test],y_test),callbacks = [early_stopping])
+GRUs.fit([X_train,zero_pad_train],y_train,epochs=1,batch_size = 64,validation_data = ([X_test,zero_pad_test],y_test),callbacks = [early_stopping])
 
 GRUs.save("chatbot-attention_weight.h5")
 

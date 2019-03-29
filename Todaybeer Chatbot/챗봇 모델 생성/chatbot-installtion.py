@@ -110,7 +110,7 @@ concat = layers.Concatenate(axis=-1,name = "Concatenate_Decoder_O_and_Context_Ve
 Feed_forward = layers.Dense(512,activation = "tanh",name="Feed_forward")
 finally_output = Feed_forward(concat)
 
-predicts = layers.Dense(22,activation="softmax")(finally_output)
+predicts = layers.Dense(21,activation="softmax")(finally_output)
 
 GRUs = Model(inputs = [inputs_s,inputs_z,inputs_u], outputs = [predicts])
 
