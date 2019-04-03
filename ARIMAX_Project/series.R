@@ -125,3 +125,4 @@ final <- predict(model1,xtransf=pred[24,],h=1)
 
 exp(14.647503+final$pred)
 # 실측값 2311447과 0.8% 정확도로 예측하였다.
+
