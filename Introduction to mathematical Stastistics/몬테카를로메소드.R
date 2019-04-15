@@ -82,3 +82,16 @@ Y2 <- runif(1000)
 ## X1 = (-2logY1)^(1/2)*cos(2*pi*Y2) 혹은 X2 = (-2logY2)^(1/2)*sin(2*pi*Y2)의 결합 pdf로 알려져 있다.
 
 X1 <- (-2*log(Y1))^(1/2)*cos(2*Y_bar*Y2)
+
+## 오염된 정규분포가 e = 0.25와 sige = 25를 따를 때, n=20에서 다음의 가설을 검정하시오
+## H0 : mu = 0, H1 : mu > 0 (유의수준 a = 0.05)
+e = 0.25
+sige = 25
+
+Y1 <- runif(20)
+Y2 <- runif(20)
+X1 <- (-2*log(Y1))^(1/2)*cos(2*Y_bar*Y2)
+W <- pnorm(X1)*(1-e)+pnorm(X1/sige))
+X1_bar <- sum(X1)/length(X1)
+X1_sig <- sum((X1-X1_bar)^2)/(length(X1)-1)
+t_test <- (X1 - X1_bar)/ 

@@ -72,5 +72,16 @@ hist(theta_boot,probability = TRUE)
 print(v)
 # 이 때, v=20은 부트스트랩된 확률분포의 확률 0.05 오른쪽에 있으므로, H0를 기각하고 둘은 다른 분포임을 확인할 수 있다.
 
-# 3. X1...Xn이 gamma(a=1,b=b)에서 추출한 확률표본이다.
-## 1) 신뢰구간 [(2n*X_bar)/chisq(2n))^(1-(a/2)),(2n*X_bar)/chisq(2n))^(a/2)]가 b에 대한 정확한 (1-a)% 신뢰구간임을 보여라
+
+# 3. X = c(x1,x2...xn)과 Y = c(y1,y2....yn)인 두 확률표본의 실현값들의 모임이다. 검정통계량은 표본평균의 차이 y_bar-x_bar이다. 이 검정의 p값을 추정하시오
+X <- c(10,15,21)
+Y <- c(20,25,30)
+Z <- c(X,Y)
+## 부트스트랩을 실시한다.
+test = 0
+for(i in (0:3)){
+  choice <- round(runif(1,min=1,max=length(Z)))
+  test[i] <- Z[choice]
+  rm(Z[choice])
+}
+  
