@@ -27,3 +27,4 @@ for(i in 0:10000){
   ceta <- ceta - f(x,ceta)/f_prime(x,ceta)
   print(ceta)
 }
+
