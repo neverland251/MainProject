@@ -1,0 +1,23 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1558274064043.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "1889534576",
+    "id" : "B8072EFC",
+    "lastKnownWriteTime" : 1558279593,
+    "last_content_update" : 1558279593644,
+    "path" : "~/GitHub/MainProject/Introduction to mathematical Stastistics/회귀분석(계수검정).r",
+    "project_path" : "Introduction to mathematical Stastistics/회귀분석(계수검정).r",
+    "properties" : {
+        "cursorPosition" : "45,6",
+        "scrollLine" : "14",
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

@@ -17,8 +17,9 @@ b <- length(colnames(q1))
 total <- a*b
 
 ## Q4에서, 이 함수는 행에 의존하지 않으므로 sum(행) -> length(행)으로 바뀌어서 곱해진다. 즉
-Q4 <- a * sum((colMeans(q1)-(sum(q1)/total)))
-Q5 <- sum(q1 - colMeans(q1) - rowMeans(q1) + (sum(q1)/total))
+Q4 <- a * sum((colMeans(q1)-(sum(q1)/total))^2)
+sum_q5 <- rbind(data.frame(q1[1,]-colMeans(q1) - rowMeans(q1)),data.frame(q1[2,] - colMeans(q1) - rowMeans(q1)),data.frame(q1[3,]-colMeans(q1) - rowMeans(q1)))
+Q5 <- sum((sum_q5 + (sum(q1)/total))^2)
 
 (Q4/(b-1))/(Q5/((a-1)*(b-1)))
 
