@@ -1,0 +1,23 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1558521506741.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2762038210",
+    "id" : "8824743C",
+    "lastKnownWriteTime" : 1558531441,
+    "last_content_update" : 1558531441970,
+    "path" : "~/GitHub/MainProject/Introduction to mathematical Stastistics/비모수검정 - 부호검정.r",
+    "project_path" : "Introduction to mathematical Stastistics/비모수검정 - 부호검정.r",
+    "properties" : {
+        "cursorPosition" : "34,0",
+        "scrollLine" : "3",
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 3,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
