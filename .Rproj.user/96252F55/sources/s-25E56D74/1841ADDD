@@ -1,0 +1,23 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1558860364349.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2036498134",
+    "id" : "1841ADDD",
+    "lastKnownWriteTime" : 1558870936,
+    "last_content_update" : 1558870936134,
+    "path" : "~/GitHub/MainProject/Introduction to mathematical Stastistics/독립성검정.r",
+    "project_path" : "Introduction to mathematical Stastistics/독립성검정.r",
+    "properties" : {
+        "cursorPosition" : "32,0",
+        "scrollLine" : "1",
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 4,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
