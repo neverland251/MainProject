@@ -16,7 +16,7 @@ colnames(rawdata_visit) <- c("서울","인천","경기","강원","충청","경�
 rawdata_visit[is.na(rawdata_visit)] <- 0
 ##서울에서 서울에서만 관광활동 마무리
 
-j = 1
+j = 1리
 a <- rawdata_visit[rawdata_visit[j] == j,]
 
 for(i in rep(2:9)){
