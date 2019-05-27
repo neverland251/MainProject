@@ -68,15 +68,15 @@ k_m_t_t <- kmeans(t(conzone_value[[1]]),centers = 3)
 
 test_1_1 <- t(conzone_value[[1]][names(k_m$cluster[k_m$cluster == 1]),names(k_m_t$cluster[k_m_t$cluster == 1])])
 test_2_2 <- t(conzone_value[[1]][names(k_m$cluster[k_m$cluster == 2]),names(k_m_t$cluster[k_m_t$cluster == 2])])
-test_4_4 <- t(conzone_value[[1]][names(k_m$cluster[k_m$cluster == 3]),names(k_m_t$cluster[k_m_t$cluster == 3])])
+test_3_3 <- t(conzone_value[[1]][names(k_m$cluster[k_m$cluster == 3]),names(k_m_t$cluster[k_m_t$cluster == 3])])
 
 cor_1 <- cor(test_1_1)
 cor_2 <- cor(test_2_2)
-cor_4 <- cor(test_4_4)
+cor_3 <- cor(test_3_3)
 
 corrplot(cor_1)
 corrplot(cor_2)
-corrplot(cor_4)
+corrplot(cor_3)
 
 ## 공분산 행렬을 저장한다.
 
@@ -110,11 +110,14 @@ mean(t(k_m_t$centers - var_mean_t_t))
 
 a <- c()
 b <- c()
-c <- runif(10000,0,100)
+c <- runif(1000,50,100)
 
 for(i in c){
-  a <- pmnorm(i,mean=k_m_t$centers[1],varcov=conzone_1_cov)
+  a <- pmnorm(i,mean=k_m_t$centers[2],varcov=conzone_2_cov)
   b <- rbind(b,a[[1]])
 }
 
-plot(c,(1-b))
+d <- cbind(data.frame(b),data.frame(c))
+
+ggplot(d,aes(x=c,y=(1-b))) + geom_line() + geom_vline(xintercept=k_m_t$centers[2])
+

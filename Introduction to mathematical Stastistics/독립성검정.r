@@ -30,3 +30,4 @@ dt(t_cor,n-2)
 
 test_result <- data.frame(n = c(100,200),mean_x = c(10,12), mean_y = c(20,22), std_x = c(5,6), std_y = c(8,10), r = c(0.7,0.8))
 
+
