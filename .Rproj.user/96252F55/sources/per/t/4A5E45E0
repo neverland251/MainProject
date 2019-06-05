@@ -1,0 +1,23 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1559713087132.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "790980801",
+    "id" : "4A5E45E0",
+    "lastKnownWriteTime" : 1559742936,
+    "last_content_update" : 1559742936492,
+    "path" : "~/GitHub/MainProject/Introduction to mathematical Stastistics/비모수검정 - 윌콕슨 선형회귀의 계수 검정.r",
+    "project_path" : "Introduction to mathematical Stastistics/비모수검정 - 윌콕슨 선형회귀의 계수 검정.r",
+    "properties" : {
+        "cursorPosition" : "42,17",
+        "scrollLine" : "21",
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 5,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
