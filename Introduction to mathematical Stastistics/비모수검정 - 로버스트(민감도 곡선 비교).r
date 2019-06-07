@@ -62,3 +62,9 @@ for(i in seq(-300,300,by=10)){
 sensi_hodges <- data.frame("sensi" = sensi_hodges,"abnom" = seq(-300,300,by=10))
 
 plot(sensi_hodges)
+
+h <- merge(merge(sensi,sensi_median,by=c("abnom")),sensi_hodges,by=c("abnom"))
+
+ggplot(h) + geom_line(aes("x" = abnom,"y"=sensi)) + geom_line(aes("x" = abnom,"y" = sensi.x)) + geom_line(aes("x" = abnom,"y" = sensi.y))
+
+                                                                                                                                                      
