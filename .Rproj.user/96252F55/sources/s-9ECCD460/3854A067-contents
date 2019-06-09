@@ -33,4 +33,4 @@ ggplot(h,aes("x" = e)) + geom_line(aes("y" = a),color="red") + geom_line(aes("y"
 
 
                   
-                  
+rank(abs(c(-6.1,4.3,7.2,8.0,-2.1)))
