@@ -1,0 +1,23 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1560260077503.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "B2B677BA",
+    "lastKnownWriteTime" : 1560265743,
+    "last_content_update" : 1560265743787,
+    "path" : "~/GitHub/MainProject/statistics/Introduction to mathematical Stastistics/베이지안 - 무정보 사전분포를 통한 베이지안 해 추정.r",
+    "project_path" : "statistics/Introduction to mathematical Stastistics/베이지안 - 무정보 사전분포를 통한 베이지안 해 추정.r",
+    "properties" : {
+        "cursorPosition" : "54,32",
+        "scrollLine" : "24",
+        "tempName" : "Untitled2"
+    },
+    "relative_order" : 3,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

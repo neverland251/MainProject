@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1560176546996.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "6CE3CFBC",
+    "lastKnownWriteTime" : 1560181102,
+    "last_content_update" : 1560181102135,
+    "path" : "~/GitHub/MainProject/statistics/Introduction to mathematical Stastistics/베이지안 - 점추정, 구간추정, 검정.r",
+    "project_path" : "statistics/Introduction to mathematical Stastistics/베이지안 - 점추정, 구간추정, 검정.r",
+    "properties" : {
+        "cursorPosition" : "9,60",
+        "scrollLine" : "0"
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
