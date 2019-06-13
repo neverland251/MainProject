@@ -87,7 +87,7 @@ c(lower,upper)
 
 ## 3) 베이지안 추정해를 MCMC로 구하시오
 
-a <- 10
+a <- 20
 b <- 10
 n <- 300
 
@@ -107,3 +107,38 @@ for(j in seq(0,300)){
   print(c("iter",j,"complete"))
 }
 
+#3. (계층적 깁스샘플러)
+## 베이지안 모형이 다음과 같이 주어졌다.
+# X|a <- N(a,b^2/n)
+# a|k <- N(0,k^2)
+# k <- gamma(alpha,beta)
+## 1) 이 계층적 베이지안 모형의 전체 결합 pdf g(X,a,k)를 정의하시오
+### 1) 계층적 깁스샘플링을 수행하기 위해선, 하이퍼파라미터 k에 대한 결합pdf와 파라미터 a에대한 결합 pdf 두개가 필요하다.
+### 2) 우선, 전체 결합 pdf를 정의하면
+# g(X,a,k) <- f(x|a)*h(a|k)*z(k)
+# =(1/Gamma(alpha)*beta^(alpha))*(1/2*pi)*(1/(b/n^(1/2)))*(1/k)*exp(-(1/2)*((x-a)^2/b^2)+(a^2/k^2))*exp((-k/beta)) 이다.
+
+## 2) 모수의 사전 결합 pdf와 하이퍼모수의 사전 결합 pdf를 각각 정의하시오
+### 1) 모수 결합 pdf를 정의하면
+g_a_k <- rnorm(1,(k^2/((b^2/n)+k^2))*x,(k^2*b^2)/(b^2+n*k^2)) 
+#이다.
+### 2) 하이퍼모수 결합pdf를 정의하면
+g_k <- rgamma(shape = alpha+1/2,1/((a^2/2)+(1/beta)))
+#이다.
+
+## 3) a의 초깃값을 0으로 둘 때, 이 베이지안 모형의 추정해를 구하시오
+
+x <- 0
+a <- c(0)
+k <- c()
+results <- c()
+alpha <- 1
+beta <- 1
+
+for(i in seq(1,3000)){
+  temp_k <- rgamma(1,shape = alpha+(1/2),1/((a[i]^2/2)+(1/beta)))
+  k <- c(k,temp_k)
+  temp_a <- rnorm(1,(k[i]^2/((b^2/n)+k[i]^2))*x,(k[i]^2*b^2)/(b^2+n*k[i]^2))
+  a <- c(a,temp_a)
+  results <- c(results,rnorm(1,a[i+1],b^2/n))
+}

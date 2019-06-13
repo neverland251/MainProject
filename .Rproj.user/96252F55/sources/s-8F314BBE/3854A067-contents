@@ -34,3 +34,20 @@ ggplot(h,aes("x" = e)) + geom_line(aes("y" = a),color="red") + geom_line(aes("y"
 
                   
 rank(abs(c(-6.1,4.3,7.2,8.0,-2.1)))
+
+x <- seq(2,100,by = 2)
+d <- c()
+for(i in seq(1,100)){
+  d <- c(d,sum(1/(x[1:i])))
+}
+
+for(i in seq(0,1000)){
+  if(abs((1+(1/i))^(i) - exp(1)) < 1/10){
+    print(i)
+    halt
+  }
+}
+
+(1+(1/4))^4
+
+2*x/(1+x)
