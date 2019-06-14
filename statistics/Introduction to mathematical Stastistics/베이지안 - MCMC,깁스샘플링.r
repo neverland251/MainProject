@@ -107,7 +107,38 @@ for(j in seq(0,300)){
   print(c("iter",j,"complete"))
 }
 
-#3. (계층적 깁스샘플러)
+#3. 2단계 베이지안 모형의 결합 pdf가 다음과 같은 비례식으로 주어졌다.
+# (factorial(n)/(factorial(x)*(factorial(n-x))*y^(x-a-1)*(1-y)n-x+b-1
+## 1) 표본 모형을 X와 Y로 정의할 때, 각각의 조건부 pdf f(x|y)와 f(y|x)를 정의하라
+### (1) f(x,y) = f(x|y)*f(x)와 같으므로, 우선 f(x,y)가 어떤 분포들의 결합으로 이루어졌는지 추정하면
+#### - 이항분포 : (factorial(n)/(factorial(x)*(factorial(n-x))*y^(x)*(1-y)^(n-x)
+#### - 베타분포 : K * y^(a-1)*(1-y)^(b-1) [단, k는 gamma(a+b)/gamma(a)*gamma(b)는 비례식에서 생략된 상태이다]
+
+## 2) 깁스 샘플링을 작성하라
+
+a <- 10
+b <- 4
+n <- 6000
+x <- c(0)
+y <- c()
+for(i in seq(1,6000)){
+  temp <- rbeta(1,shape1 = x[i] + a, shape2 = n - x[i] + b)
+  y <- c(y,temp)
+  x <- c(x,rbinom(1,n,temp)) 
+}
+
+### (1) E(X)를 구하면
+
+e_x <- 6000*(a/(a+b))
+
+### (2) 신뢰구간을 구하면
+
+lower <- (sum(x[3001:6000])/3000) - qnorm(0.025,0,1)*(var(x)^(1/2)/3000^(1/2))
+upper <- (sum(x[3001:6000])/3000) + qnorm(0.025,0,1)*(var(x)^(1/2)/3000^(1/2))
+
+c(lower,upper,e_x)
+
+#4. (계층적 깁스샘플러)
 ## 베이지안 모형이 다음과 같이 주어졌다.
 # X|a <- N(a,b^2/n)
 # a|k <- N(0,k^2)
@@ -142,3 +173,43 @@ for(i in seq(1,3000)){
   a <- c(a,temp_a)
   results <- c(results,rnorm(1,a[i+1],b^2/n))
 }
+
+# 5. 베이지안 모형이 다음과 같이 주어졌다.
+# Y|p ~ binom(n,p)
+# P|C ~ h(p|c) = c*p^(c-1)
+# C ~ gamma(1,a)
+## 1) 손실함수로 MSE가 주어졌을 때, 이 계층적 베이지안 모형의 손실함수의 기댓값(즉 위험함수)를 정의하시오
+### 1) 3단계 계층적 베이지안 모형은 두개의 모수(모수, 하이퍼모수)에 대한 적분을 실시한다. 우선, 하이퍼모수 c에 대하여 적분하면
+# integrate(손실함수)[integrate(f(y|p)*h(p|c)*u(c)dc)]dp / integate[integrate(f(y|p)*h(p|c)*u(c))dc]dp
+# integrate(손실함수)*beta(y+1,n*-y+1)dp
+### 이는 beta(y+1,n*-y+1)을 따른다.
+
+rgamma(1,shape = 2, scale = (1/a - log(p[i]))^(-1))
+temp <- rbeta(1,y+c,n-y+1)
+### 모수에 대해 적분하지 않고, 하이퍼 모수에서만 적분을 실시한 채로 
+## 2) 초깃값 y를 획득하라.
+
+initial <- rgamma(1,shape=1,scale=2)
+initial_p <- exp((runif(1)-log(initial))/(initial-1))
+y <- c(rbinom(1,50,initial_p))
+## 3) 깁스 샘플링 알고리즘을 작성하라
+b <- c(initial)
+p <- c()
+y <- c(y)
+n <- 50
+
+for(i in seq(1,6000)){
+  temp <- rbeta(1,shape1 = y[i]+b[i], shape2 = n - y[i] + 1) 
+  p <- c(p,temp)
+  temp <- rgamma(1,shape = 2, scale = ((1/a) - log(p[i]))^(-1))
+  b <- c(b,temp)
+  temp <- rbinom(1,n,p[i])
+  y <- c(y,temp)
+}
+
+## 4) 모수 b의 기댓값과 함께, 모수 b의 95% 신용구간을 구하여라
+
+upper <- (sum(b[3001:6000])/3000) - qnorm(0.025,0,1)*(var(b[3001:6000])^(1/2)/3000^(1/2))
+lower <- (sum(b[3001:6000])/3000) + qnorm(0.025,0,1)*(var(b[3001:6000])^(1/2)/3000^(1/2))
+
+c(upper,sum(b[3001:6000])/3000,lower)
