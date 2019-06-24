@@ -5,15 +5,15 @@
     "dirty" : false,
     "encoding" : "UTF-8",
     "folds" : "",
-    "hash" : "4249402560",
+    "hash" : "1734188125",
     "id" : "33FFD195",
-    "lastKnownWriteTime" : 1561034547,
-    "last_content_update" : 1561034547859,
+    "lastKnownWriteTime" : 1561375401,
+    "last_content_update" : 1561375401981,
     "path" : "~/GitHub/MainProject/statistics/Introduction to mathematical Stastistics/뉴턴법.r",
     "project_path" : "statistics/Introduction to mathematical Stastistics/뉴턴법.r",
     "properties" : {
-        "cursorPosition" : "82,1",
-        "scrollLine" : "54"
+        "cursorPosition" : "19,2",
+        "scrollLine" : "0"
     },
     "relative_order" : 2,
     "source_on_save" : false,
