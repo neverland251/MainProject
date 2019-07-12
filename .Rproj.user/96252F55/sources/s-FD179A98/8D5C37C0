@@ -1,0 +1,23 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1562943843101.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3581028109",
+    "id" : "8D5C37C0",
+    "lastKnownWriteTime" : 1562951369,
+    "last_content_update" : 1562951369089,
+    "path" : "~/GitHub/MainProject/statistics/Introduction to mathematical Stastistics/특수한 분포 - 다변량 정규분포(주성분분석).r",
+    "project_path" : "statistics/Introduction to mathematical Stastistics/특수한 분포 - 다변량 정규분포(주성분분석).r",
+    "properties" : {
+        "cursorPosition" : "22,0",
+        "scrollLine" : "0",
+        "tempName" : "Untitled3"
+    },
+    "relative_order" : 5,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
