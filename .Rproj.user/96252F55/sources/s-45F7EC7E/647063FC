@@ -1,0 +1,23 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1563374241770.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3111731568",
+    "id" : "647063FC",
+    "lastKnownWriteTime" : 1563374255,
+    "last_content_update" : 1563374255165,
+    "path" : "~/GitHub/MainProject/statistics/Introduction to mathematical Stastistics/기본 추론 - 신뢰구간 구하기.r",
+    "project_path" : "statistics/Introduction to mathematical Stastistics/기본 추론 - 신뢰구간 구하기.r",
+    "properties" : {
+        "cursorPosition" : "80,0",
+        "scrollLine" : "49",
+        "tempName" : "Untitled3"
+    },
+    "relative_order" : 7,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
