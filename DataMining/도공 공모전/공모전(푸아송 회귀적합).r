@@ -10,3 +10,4 @@ death_2012 <- c(70,25,14,23,34)
 death_data <- t(data.frame(death_2017,death_2016,death_2015,death_2014,death_2013,death_2012))
 colnames(death_data) <- highway_name
 
+rawdata <- read.csv("D://공모전//교통빅데이터//데이터셋//구간속도(2012~2017)//VDS_구간통행속도_1일_1개월_통합.csv")
