@@ -91,7 +91,25 @@ sige = 25
 Y1 <- runif(20)
 Y2 <- runif(20)
 X1 <- (-2*log(Y1))^(1/2)*cos(2*Y_bar*Y2)
-W <- pnorm(X1)*(1-e)+pnorm(X1/sige))
+W <- pnorm(X1)*(1-e)+pnorm(X1/sige)))
 X1_bar <- sum(X1)/length(X1)
 X1_sig <- sum((X1-X1_bar)^2)/(length(X1)-1)
-t_test <- (X1 - X1_bar)/ 
+t_test <- (X1 - X1_bar)
+
+
+log2 <- 1/(runif(10000) + 1)
+upper <- (sum(log2)/10000) + pnorm(0.025,0,1)*(var(log2)^(1/2)/length(log2)^(1/2))
+lower <- (sum(log2)/10000) + pnorm(0.025,0,1)*(var(log2)^(1/2)/length(log2)^(1/2))
+c(upper,lower)
+
+
+
+nor <- (1/(2*pi)^(1/2))*exp(-(1/2)*runif(10000,0,1.96)^2)
+norstat <- ((1.96-0)*sum(nor)/10000)
+upper <- norstat + pnorm(0.025)*(var(nor)^(1/2)/length(nor)^(1/2))
+lower <- norstat - pnorm(0.025)*(var(nor)^(1/2)/length(nor)^(1/2))
+c(upper,lower)
+pnorm(1.96) - pnorm(0)
+
+x <- log(2*runif(10000)^3)/2
+mean(x)
