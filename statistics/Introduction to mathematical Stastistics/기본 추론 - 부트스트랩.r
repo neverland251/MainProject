@@ -37,11 +37,13 @@ print(c(lower,upper))
 ## 1. 주어진 CD의 역함수와 uniform 분포를 결합하여 100개를 무작위로 추출한다.
 e = 0.2
 sige = 4
-W <- qnorm(runif(100))*(1-e)+qnorm(runif(100)/sige)*(e/sige)
+ind <- rbinom(30,1,e)
+a <- rnorm(30)
+W <- a*(1-ind)+sige*a*ind
 
 ## 주어진 확률변수로 변환해준다.
-X <- 10*W[1:50]+100
-Y <- 10*W[51:100]+120
+X <- 10*W[1:15]+100
+Y <- 10*W[15:30]+120
 
 boxplot(X)
 boxplot(Y)
@@ -50,18 +52,23 @@ boxplot(Y)
 
 X_bar <- sum(X)/length(X)
 Y_bar <- sum(Y)/length(Y)
-v <- Y_bar - X_bar
+V_mean <- Y_bar - X_bar
+
+X_med <- median(X)
+Y_med <- median(Y)
+V_med <- Y_med - X_med
 
 ## H0를 기각하는 것이 목적이므로, 두 표본을 하나 합친 확률변수를 생성한다.
-Z <- c(X,Y)
+z <- c(X,Y)
+theta_boot <- c()
 ## 부트스트랩을 실시한다.
 for(i in 0:3000){
   ## 균등분포로부터 10개의 값을 추출하여, 소수점을 절사하고 numb에 담는다.
-  X_numb <- round(runif(10,min=1,max=30))
-  Y_numb <- round(runif(10,min=1,max=30))
+  #X_numb <- round(runif(10,min=1,max=30))
+  #Y_numb <- round(runif(10,min=1,max=30))
   ## 샘플변수들의 평균을 구한다.
-  X_boot <- sum(Z[X_numb])/length(Z[X_numb])
-  Y_boot <- sum(Z[Y_numb])/length(Z[Y_numb])
+  X_boot <- mean(sample(z,15),replace=TRUE)
+  Y_boot <- mean(sample(z,15),replace=TRUE)
   ## 평균값의 차이를 구한다.
   boot_theta <- Y_boot - X_boot
   ## 해당 값을 일단 저장해준다.
@@ -69,24 +76,96 @@ for(i in 0:3000){
 }
 # 검정통계량인 v값과 부트스트랩된 vj값을 비교할 수 있도록 히스토그램을 그린다.
 hist(theta_boot,probability = TRUE)
-print(v)
+length(theta_boot[theta_boot > V_mean])/length(theta_boot)
 # 이 때, v=20은 부트스트랩된 확률분포의 확률 0.05 오른쪽에 있으므로, H0를 기각하고 둘은 다른 분포임을 확인할 수 있다.
+
+# 이번엔 중앙값을 확인한다.
+z <- c(X,Y)
+theta_boot <- c()
+## 부트스트랩을 실시한다.
+for(i in 0:3000){
+  ## 균등분포로부터 10개의 값을 추출하여, 소수점을 절사하고 numb에 담는다.
+  #X_numb <- round(runif(10,min=1,max=30))
+  #Y_numb <- round(runif(10,min=1,max=30))
+  ## 샘플변수들의 평균을 구한다.
+  X_boot <- median(sample(Z,15),replace=TRUE)
+  Y_boot <- median(sample(Z,15),replace=TRUE)
+  ## 평균값의 차이를 구한다.
+  boot_theta <- Y_boot - X_boot
+  ## 해당 값을 일단 저장해준다.
+  theta_boot[i] <- boot_theta
+}
+# 검정통계량인 v값과 부트스트랩된 vj값을 비교할 수 있도록 히스토그램을 그린다.
+hist(theta_boot,probability = TRUE)
+
+length(theta_boot[theta_boot > V_med])/length(theta_boot)
 
 
 # 3. X = c(x1,x2...xn)과 Y = c(y1,y2....yn)인 두 확률표본의 실현값들의 모임이다. 검정통계량은 표본평균의 차이 y_bar-x_bar이다. 이 검정의 p값을 추정하시오
-X <- c(10,15,21)
-Y <- c(20,25,30)
+X <- c(94.2,111.3,90.0,99.7,116.8,92.2,166.0,95.7,109.3,106.0,111.7,111.9,111.6,146.4,103.9)
+Y <- c(125.5,107.1,67.9,98.2,128.6,123.5,116.5,143.2,120.3,118.6,105.0,111.8,129.3,130.8,139.8)
 Z <- c(X,Y)
 ## 부트스트랩을 실시한다.
-test = 0
-for(i in (0:3)){
-  choice <- round(runif(1,min=1,max=length(Z)))
-  test[i] <- Z[choice]
-  rm(Z[choice])
+theta_boot <- c()
+n <- length(Z)
+for(i in seq(0:3000)){
+  choice <- sample(n)
+  temp_X <- Z[choice[1:(n/2)-1]]
+  temp_Y <- Z[choice[(n/2):n]]
+  temp <- mean(temp_Y) - mean(temp_X)
+  theta_boot[i] <- temp
+
 }
 
+## 확률값을 도출한다.
 
+length(theta_boot[theta_boot>mean(Y) - mean(X)])/length(theta_boot)
+
+# 부트스트랩을 활용한 일표본 검정(평균)
+## 
+
+e = 0.2
+sige = 4
+ind <- rbinom(30,1,e)
+a <- rnorm(30)
+W <- a*(1-ind)+sige*a*ind
+
+X <- 10*W + 100
+
+theta_boot <- c()
+for(i in seq(1,3000)){
+  temp <- sample(X,length(X),replace=TRUE)
+  temp <- temp - mean(X) + 90
+  theta_boot[i] <- mean(temp)   
+  
+}
+
+length(theta_boot[theta_boot > mean(X)])/length(theta_boot)
+
+#부트스트랩을 활용한 일표본 검정(중앙값)
+e = 0.2
+sige = 4
+ind <- rbinom(30,1,e)
+a <- rnorm(30)
+W <- a*(1-ind)+sige*a*ind
+
+X <- 10*W + 100
+
+theta_boot <- c()
+for(i in seq(0,3000)){
+  temp <- sample(X,length(X),replace=TRUE)
+  temp <- temp - median(X) + 90
+  theta_boot[i] <- median(temp)   
+  
+}
+
+length(theta_boot[theta_boot > median(X)])/length(theta_boot)
+
+
+
+(20^(1/2)*(mean(x)-90))/var(x)^(1/2)
 # 4. 네이만-피어슨 정리에 의거한 우도비 검정을 통해 
+
 # H0 : c1 = c2, h1 : c1 =/ c2인 복합 가설을 검정하는 통계량 g(y)를 정의한 결과 
 # g(y) = L(a^)/L(b^) <= k가 되었다.(단, a^,b^는 a와 b에 대한 mle 추정값을 투입한 최대우도함수)
 # 이 때, 이 역함수 y = g^(-1)(L(a^)/L(b^)) 는 (L(a^)/L(b^))^(2/m+n)이 되었고, 이 식은 정리하면 다음의 식을 따르는 t검정량 공식이 나온다.
@@ -122,3 +201,66 @@ for(i in 0:3000){
 hist(theta_boot)
 ## 비모수 검정법은 KS검정의 결과도, 분포가 동일하다는 귀무가설을 기각하지 못하기 때문에 동일한 분포임을 확인할 수 있다.
 ks.test(theta_boot,qnorm(runif(3000),mean = 0,sd = 1))
+
+## 부트스트랩 중앙값에 대한 90% 신뢰구간 구하기
+
+x <- c(131.7,182.7,73.3,10.7,150.4,42.3,22.2,17.9,264.0,154.4,4.3,264.6,61.9,10.8,48.8,22.5,8.8,150.6,103.0,84.9)
+
+result <- c()
+for(i in seq(0,3000)){
+  temp <- sample(x,length(x),replace=TRUE)
+  theta <- mean(temp)
+  result <- c(result,theta)
+}
+
+lower <- ((0.05/2) * length(result))
+upper <- length(result) + 1 - lower
+
+print(c(sort(result)[lower],sort(result)[upper]))
+
+# 이 부트스트랩 신뢰구간은 실제 모수를 포함한다.
+mean(x)
+
+## 추정량의 표준화
+
+result <- c()
+for(i in seq(0,3000)){
+  temp <- sample(x,length(x),replace=TRUE)
+  theta <- mean(temp)
+  # 부트스트랩 통계량을 t분포를 따르는 값으로 재정의한다.
+  theta <- (length(temp)^(1/2)*(theta - mean(x)))/(var(temp)^(1/2))
+  result <- c(result,theta)
+}
+
+result <- sort(result)
+
+print(c(mean(x)-(result[lower]*(var(x)^(1/2))/length(x)^(1/2)),mean(x)-(result[upper]*(var(x)^(1/2))/length(x)^(1/2))))
+
+# 표준화한 부트스트랩 통계량은 앞서 구한 통계량의 신뢱구간과 거의 일치하나, 조금 더 보수적이다.
+
+# 지메이스 자료를 이용한 부트스트랩
+
+X <- c(23.5,12.0,21.0,22.0,19.125,21.5,22.125,20.375,18.250,21.625,23.250,21,22.125,23,12)
+Y <- c(17.375,20.375,20.0,20,18.375,18.625,18.625,15.250,16.5,18.0,16.25,18,12.75,15.5,18)
+
+# 가설 검정은 <X와 Y의 차이>에 대하여 그 값이 0이라는 가설을 검정한다.
+# H0 하에서 검정을 실시해야 하기 때문에 <차이 값>에서 <평균의 차이 값>을 빼준 후, 가설 평균 0을 더하여 H0를 만족하도록 변수를 조작해준다
+# 이렇게 까지 했는데도 0과 유의미한 차이가 있다면, 이는 귀무가설을 기각하고 연구가설을 채택하는 아주 강력한 근거가 될 것이다.
+
+Z <- X - Y
+Z_real <- mean(X) - mean(Y)
+
+# H0  : mu = 0이라는 가설이 참이라는 전제 하에 검정을 실시할 수 있도록 위치를 조정해준다.
+
+d <- (Z - (mean(X) - mean(Y)) + 0)
+
+# 부트스트랩 3000번 실시
+
+for(i in seq(0,3000)){
+  temp <- sample(d,length(d),replace=TRUE)
+  boot_theta[i] <- mean(temp)
+}
+
+#확률을 구해준다.
+
+length(boot_theta[boot_theta>(mean(X)-mean(Y))])/length(boot_theta) < 0.05

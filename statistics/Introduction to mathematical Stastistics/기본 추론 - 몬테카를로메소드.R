@@ -113,3 +113,53 @@ pnorm(1.96) - pnorm(0)
 
 x <- log(2*runif(10000)^3)/2
 mean(x)
+
+# 라플라스 PDF로부터 확률적 관측값을 생성하는 알고리즘을 작성하라라
+
+
+abs(-log(2)-log(runif(1000)))
+
+log(-log(1-runif(10000,0,1)))
+
+# 정규분포를 따르지 않는 N=20의 오염된 정규분포를 따르는 확률변수 X에 대하여 
+# H0 : mu = 0 VS mu >0 이라는 가설을 검정하라
+# (단, 오염된 정규분포의 trade-off 계수는 0.25, 오염 표준편차는 25로 알려져있다. 몬테카를로 방법을 활용하라)
+
+## 1) 계수 0.25, 오염 표준편차 0.25인 X의 분포의 pdf를 정의하면
+e <- 0.25
+(1-e)pnorm
+
+rcn <- function(n,eps,sigmac){
+  ind <- rbinom(n,1,eps)
+  x <- rnorm(n)
+  return(x*(1-ind)+sigmac*x*ind)
+}
+n <- 20
+e <- 0.25
+a <- 0.05
+sigmac <- 25
+tc <- qt(1-a,n-1)
+
+success <- 0
+
+for(i in seq(0,1000)){
+  hazard <- rcn(20,0.25,25)
+  if((n^(1/2)*(mean(hazard) - 0.5))/(var(hazard)^(1/2)) > tc){
+    success <- success + 1
+  }
+}
+
+qnorm(0.95)*(((success/1000)*(1-success/1000))/1000)^(1/2)
+
+# 이번엔 로지스틱 분포에 대하여 
+# H0 : mu = 0.5 Vs H1 : mu > 0.5 가설의 검정력을 구하라
+
+for(i in seq(0,1000)){
+  p <- runif(n)
+  hazard <- log(p/(1-p))
+  if((n^(1/2)*(mean(hazard) - 0.5))/(var(hazard)^(1/2)) > tc){
+    success <- success + 1
+  }
+}
+
+qnorm(0.95)*(((success/1000)*(1-success/1000))/1000)^(1/2)
