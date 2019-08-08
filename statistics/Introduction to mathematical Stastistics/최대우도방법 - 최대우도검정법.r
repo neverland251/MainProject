@@ -50,3 +50,30 @@ t_score <- abs(((((n*m)/(n+m))^(1/2))*(x_mean-y_mean))/((x_var+y_var)/(n+m-2))^(
 
 # 인 t 검정 통계량을 도출한다.
 
+k <- 1/2
+n <- 100
+sumx <- 50
+
+(-qchisq(0.05,1)+2*n*log((1-k)/(1-sumx)))/-2*(log(c/sumx)+log((1-k)/(1-sumx)))
+
+n <- 5
+ab <- 6*n
+c <- 3
+
+(-qchisq(0.05,1)+6*n*(log((n*ab)/(3*n*c))+1))*c
+  
+
+p1 <- 37/1000
+p2 <- 53/1000
+
+plot(pnorm((p2-p1)/((p1*(1-p1)/1000)+(p2*(1-p2)/1000))^(1/2)))
+
+n1 <- 1000
+n2 <- 1000
+
+p <- ((n1*p1) + (n2*p2))/(n1+n2)
+
+different_test <- -2*(n1*p1*log(p/p1)+n2*p2*log(p/p2)+n1*(1-p1)*log((1-p)/(1-p1))+n2*(1-p2)*log((1-p)/(1-p2)))
+pchisq(different_test,1)
+
+different_test                                            
