@@ -16,3 +16,5 @@ answer <- sum((factorial(10)/(factorial(x)*factorial(10-x)))*((1/4)^x)*((3/4)^(1
 
 ## 와 같다.
               
+
+1 - pnorm(-5^(1/2))
