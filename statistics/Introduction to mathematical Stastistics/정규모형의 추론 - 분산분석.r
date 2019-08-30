@@ -49,26 +49,76 @@ f_stat > qf(0.95,2,9)
 ## 열 평균의 동일성과 
 ## 행 평균의 동일성에 이용되는 F통계량을 계산하라
 
-q1 <- data.frame(c(3.1,2.7,4.0),c(4.2,2.9,4.6),c(2.7,1.8,3.0),c(4.9,3.0,3.9))
+q1 <- data.frame("1" = c(52,60,56),"2" = c(47,55,48),"3" = c(44,49,45),"4" = c(51,52,44),"5" = c(42,43,38))
 
-##1) 2차 형식으로 표현하면, 열 평균의 검정에 사용되는 우도비 검정 통계량은
-## (Q4/(b-1))/(Q5/(a(b-1))) 인 F통계량을 따른다
-## 즉, 자유도 (b-1)과 자유도 (a(b-1))을 따르는 카이제곱검정량의 비율을 따른다.
 
-## Q4는 sum(행)sum(열){열평균 - 전체평균}^2이고
-## Q5는 sum(행)sum(열){관측값 - 열평균 - 행평균 + 전체평균)}^2 이다.
-a <- length(rownames(q1))
-b <- length(colnames(q1))
-total <- a*b
 
-## Q4에서, 이 함수는 행에 의존하지 않으므로 sum(행) -> length(행)으로 바뀌어서 곱해진다. 즉
-Q4 <- a * sum((colMeans(q1)-(sum(q1)/total))^2)
-sum_q5 <- rbind(data.frame(q1[1,]-colMeans(q1) - rowMeans(q1)),data.frame(q1[2,] - colMeans(q1) - rowMeans(q1)),data.frame(q1[3,]-colMeans(q1) - rowMeans(q1)))
-Q5 <- sum((sum_q5 + (sum(q1)/total))^2)
+var_anal <- function(data,type){
+  row_length <- length(rownames(data))
+  col_length <- length(colnames(data))
+  total <- row_length * col_length
+  total_mean <- sum(data)/total
+  
+  ##1) 2차 형식으로 표현하면, 열 평균의 검정에 사용되는 우도비 검정 통계량은
+  ## (Q4/(b-1))/(Q5/(a(b-1))) 인 F통계량을 따른다
+  ## 즉, 자유도 (b-1)과 자유도 (a(b-1))을 따르는 카이제곱검정량의 비율을 따른다.
+  
+  if(type == 1){
+    ## Q4는 sum(행)sum(열){열평균 - 전체평균}^2이고
+    ## Q5는 sum(행)sum(열){관측값 - 열평균 - 행평균 + 전체평균)}^2 이다.
+    Q4 <- sum((colMeans(data)-total_mean)^2)
+    Q5 <- sum((t(data - rowMeans(data)) - colMeans(data) + total_mean)^2)
+    F_stat <- (Q4/(col_length-1))/(Q5/((row_length-1)*(col_length-1)))
+    print(c(total_mean,Q4,Q4/(col_length-1),Q5,Q5/((row_length-1)*(col_length-1))))
+    return(c(F_stat,qf(0.95,col_length-1,(col_length-1)*(row_length-1))))
+    
+  }
+  #2) 2차 형식으로 표현하면, 행 평균의 검정에 사용되는 우도비 검정 통계량은
+  ## Q2(a-1)/Q5/(a(b-1)))인 F통계량을 따른다
+  ## 즉, 자유도 (a-1)과 자유도(a(b-1))을 따르는 카이제곱검정량의 비율을 따른다.
+  if(type == 2){
+    Q2 <- sum((rowMeans(data) - total_mean)^2)
+    Q5 <- sum((t(data - rowMeans(data)) - colMeans(data) + total_mean)^2)
+    F_stat <- (Q2/(row_length-1))/(Q5/((row_length-1)*(col_length-1)))
+    print(c(Q2,Q5))
+    return(c(F_stat,qf(0.95,row_length-1,(col_length-1)*(row_length-1))))
+  }
+}
 
-(Q4/(b-1))/(Q5/((a-1)*(b-1)))
+var_anal(q1,1)
+  
+var_anal_cross <- function(data,type){
+  colnames(data) <- c("value","col","row","group")
+  col_length <- length(unique(data$col))
+  row_length <- length(unique(data$row))
+  group_length <- length(unique(data$group))
+  
+  col_mean <- aggregate(value~col,mean,data=data)
+  row_mean <- aggregate(value~row,mean,data=data)
+  group_mean <- aggregate(value~group,mean,data=data)
+  total_mean <- sum(data$value)/length(data)
+  
+  
+  
+}
 
-#2) 2차 형식으로 표현하면, 행 평균의 검정에 사용되는 우도비 검정 통계량은
-## Q2(a-1)/Q5/(a(b-1)))인 F통계량을 따른다
-## 즉, 자유도 (a-1)과 자유도(a(b-1))을 따르는 카이제곱검정량의 비율을 따른다.
+# 코드 수정ㅈ
 
+var_anal(q1,1)
+
+q1_melt <- reshape2::melt(q1)
+q1_melt <- cbind(q1_melt,row = rep(seq(1,3),4))
+k <- aov(value~variable + row ,q1_melt)
+summary(k)
+
+anova(lm(value~variable+row,q1_melt))
+
+k <- data.frame(c(6,10,8),c(7,3,5),c(7,11,9),c(12,8,10))
+rowMeans(k)
+
+t(t(k - rowMeans(k)) - colMeans(k)) + (sum(k)/12)
+
+
+q1_melt$row
+
+data.frame(c(3,2.8,4.2),)
