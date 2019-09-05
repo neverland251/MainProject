@@ -57,7 +57,37 @@ data <- merge(data,VKT_melt,by=c("name","year"))
 
 ## 사망자수는 대략적으로 푸아송 분포를 따르는 것으로 보인다.
 
-plot(data$death)
+barplot(data$death)
+
+#속도 데이터의 히스토그램
+hist(data$speed)
+
+# 부트스트랩을 실시한다.
+for(i in 0:3000){
+  ## 균등분포로부터 100개의 값을 추출하여, 소수점을 절사하고 numb에 담는다.
+  numb <- round(runif(100,min=1,max=length(data$speed)))
+  ## 샘플변수를 담는다.
+  boot <- data$speed[numb]
+  ## 감마분포에서 평균을 의미하는 b의 점추정량을 추정하기 위하여 샘플에서 평균을 구해준다.
+  boot_theta <- sum(boot)/length(boot)
+  ## 해당 값을 일단 저장해준다.
+  theta_boot[i] <- boot_theta
+}
+
+#부트스트랩 히스토그램
+
+hist(theta_boot)
+
+#부트스트랩 샘플의 평균과 표준편차
+
+mean(theta_boot)
+sd(theta_boot)
+
+
+#총주행거리의 히스토그램
+hist(data$VKT)
+
+rawdata_VKT
 
 formul <- death~speed+year+offset(log(VKT))
 #+unemploy
