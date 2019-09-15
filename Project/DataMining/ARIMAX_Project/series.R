@@ -1,13 +1,14 @@
 library("ggplot2")
 library("scales")
-
+library("forecast")
 ##PAX : 방한관광객수
 ## Cur : 원 - 엔 환율
 ## IAA : 산업생산지수
 ## FRI_ab : 국가 우호도 조사에서의 우호도 : 한국을 매우 좋아한다(5점 중 5점)
 
 #데이터 파일을 불러온다.
-series <- read.table(file="PAXyear.csv",header=TRUE, sep=",",stringsAsFactors = FALSE)
+series <- read.table(file="C:\\Users\\never\\OneDrive\\문서\\GitHub\\MainProject\\Project\\DataMining\\ARIMAX_Project\\PAXyear.csv",header=TRUE, sep=",",stringsAsFactors = FALSE)
+
 print(series)
 
 series_test <- series
@@ -25,7 +26,7 @@ plot(PAX, ylab = "PAX", xlab = "Year")
 #방한관광객수 변수의 자기상관함수 그래프를 그린다.
 acf(PAX)
 ## 확인결과 지수함수적으로 감소하지 않아 이 시계열의 공분산이 일정해야한다는 시계열 분석의 기본 가정을 만족하지 못하는 것으로 의심할 수 있다.
-library(forecast)
+
 ndiffs(x = PAX)
 plot(diff(PAX,1))
 acf(diff(PAX,1))
@@ -117,22 +118,22 @@ su1res_fore <- append(su1res, su1res_fore$pred[1],after = length(su1res))
 su1res_fore <- ts(su1res_fore, start = 1989, end = 2017)
 
 ## 적합용 데이터셋을 설정한다. 2017년 예측 생산값이 담긴 fore데이터셋에서 환율, 잔차들의 1~6차시 뒤 값들을 하나로 모아준다.
-pred <- ts.intersect(cur_diff_fore, su1resd1=lag(su1res_fore,-1),su1resd2=lag(su1res_fore,-2),su1resd3=lag(su1res_fore,-3),su1resd4=lag(su1res_fore,-4),su1resd5=lag(su1res_fore,-5),su1resd6=lag(su1res_fore,-6),su1res_fore)
+fitt <- ts.intersect(cur_diff_fore, su1resd1=lag(su1res_fore,-1),su1resd2=lag(su1res_fore,-2),su1resd3=lag(su1res_fore,-3),su1resd4=lag(su1res_fore,-4),su1resd5=lag(su1res_fore,-5),su1resd6=lag(su1res_fore,-6),su1res_fore)
 
 ## 예측용 데이터셋을 생성한다. 2017년 예측을 위해 앞전 단계에서 1차시 예측 생산한 환율과, 잔차들의 데이터를 담는다.
-fitt <- ts(data.frame(pred[23,1],pred[23,8],pred[23,2],pred[23,3],pred[23,4],pred[23,5],pred[23,6]),names=c("cur_diff_fore","su1resd1","su1resd2","su1resd3","su1resd4","su1resd5","su1resd6"))
+pred <- ts(data.frame(fitt[23,1],fitt[23,8],fitt[23,2],fitt[23,3],fitt[23,4],fitt[23,5],fitt[23,6]),names=c("cur_diff_fore","su1resd1","su1resd2","su1resd3","su1resd4","su1resd5","su1resd6"))
 
 ## arimax 모형을 적합한다. Y의 차수를 ARIMA(1,0,0)으로, "환율"을 xreg로 회귀분석으로 적합하고, 방금 적합한 AR(6)의 잔차는 
 #xtransf에 투입한 후에 그 차수는 ARMA(6,0)으로 최종적으로 필터ㄹ해준다.(model1)
-model1 <- arimax(fitted[,1],order=c(1,0,0),xreg=pred[1:22,1],xtransf=pred[1:22,8],transfer=list(c(6,0)))
-Box.test(model2$residuals,type = c("Ljung-Box"))
+model1 <- arimax(fitted[,1],order=c(1,0,0),xreg=fitt[1:22,1],xtransf=fitt[1:22,8],transfer=list(c(6,0)))
+Box.test(model1$residuals,type = c("Ljung-Box"))
 
 ## 한편, 잔차를 필터로 처리하지 않고, 잔차까지 단순하게 투입변수로 취급한 적합모형도 테스트해준다(model2)
-model2 <- arimax(fitted[,1],order=c(1,0,0),xreg=pred[1:22,0:7])
-Box.test(model1$residuals,type = c("Ljung-Box"))
+model2 <- arimax(fitted[,1],order=c(1,0,0),xreg=fitt[1:22,0:7])
+Box.test(model2$residuals,type = c("Ljung-Box"))
 ## 단순하게 투입변수로 취급한 모형이 AIC, 로그우도 모두 우수하게 나타났다.
 
-final <- predict(model1,newxreg=fitt,n.ahead=1)
+final <- predict(model2,newxreg=pred,n.ahead=1)
 
 exp(14.647503+final$pred)
 # 실측값 2311447과 0.8% 정확도로 예측하였다.
