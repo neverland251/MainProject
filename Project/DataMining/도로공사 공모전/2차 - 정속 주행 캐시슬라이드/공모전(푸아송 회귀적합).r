@@ -55,10 +55,6 @@ data <- merge(mean_melt,death_melt,by=c("name","year"))
 data <- merge(data,VKT_melt,by=c("name","year"))
 #data <- merge(data,unemploy_melt,by=c("name","year"))
 
-## 사망자수는 대략적으로 푸아송 분포를 따르는 것으로 보인다.
-
-barplot(data$death)
-
 #속도 데이터의 히스토그램
 hist(data$speed)
 
@@ -81,6 +77,9 @@ for(k in 0:500){
   theta_boot_mean[k] <- mean(theta_boot)
 }
 
+# 사망자수의 예상 확률분포
+plot(dpois(x=seq(1,max(data$death)),lambda = mean(data$death)) )
+
 #부트스트랩 히스토그램
 
 hist(theta_boot_mean)
@@ -102,9 +101,9 @@ formul <- death~speed+year+offset(log(VKT))
 ## 푸아송 회귀 모델 합적합
 ### 일반 모델 적ㅎ
 fitted_model <- glm(formul,family=poisson,data=data)
-### 과산포 여부를 확인하기 위한 quasipoisson 회귀 적ㅎ
+### 과산포 여부를 확인하기 위한 quasipoisson 회귀 적합
 fitted_model_od <- glm(formul,family=quasipoisson,data=data)
-
+summary(fitted_model)
 #과산포 검정
 
 h <- sum(((as.numeric(data$death) - fitted_model$fitted.values)/sqrt(fitted_model$fitted.values))^2)/fitted_model$df.residual
@@ -113,6 +112,6 @@ pchisq(h, fitted_model$df.residual)
 # 과산포가 존재하므로, 과산포 변수를 조정한 값을 최종적으로 도출한다.
 
 sum_fitted <- summary(fitted_model,dispersion=h)
-
+sum_fitted
 # 과속 계수의 오즈비 도출수
 exp(sum_fitted$coefficients[2]) - 1
