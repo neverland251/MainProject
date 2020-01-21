@@ -198,13 +198,17 @@ for(j in seq(0,300)){
 # (factorial(n)/(factorial(x)*(factorial(n-x))*y^(x-a-1)*(1-y)n-x+b-1 ( 상수항 c(y)는 생략되었다)
 
 ## 1) 표본 모형을 X와 Y로 정의할 때, 각각의 조건부 pdf f(x|y)와 f(y|x)를 정의하라
-### (1) f(x,y) = f(x|y)*f(x)와 같으므로, 우선 f(x,y)가 어떤 분포들의 결합으로 이루어졌는지 추정하면
-#### - 이항분포(n,y) : [(factorial(n)/(factorial(x)*(factorial(n-x))]*y^(x)*(1-y)^(n-x)
-#### - 베타분포(a,b) : K * y^(a-1)*(1-y)^(b-1) [단, k는 상수항으로서 간략화하였다]
+### (1) f(x,y) = f(y|x)*f(y)와 같으므로, 우선 f(x,y)가 어떤 분포들의 결합으로 이루어졌는지 추정하면
+#### - 이항분포 f(y|x) : [(factorial(n)/(factorial(x)*(factorial(n-x))]*y^(x)*(1-y)^(n-x)
+#### - 베타분포 f(y) : K * y^(a-1)*(1-y)^(b-1) [단, k는 상수항으로서 간략화하였다]
+
+### (2) 마찬가지로, f(x,y) = f(x|y)*f(x)이므로
+#### - 베타분포 f(x|y) : K * y^(x-a-1)*(1-y)^(n-x+b-1)
+#### - ??분포 f(x) : [(factorial(n)/(factorial(x)*(factorial(n-x))]
 
 ## 2) 깁스 샘플링을 작성하라
 
-### (1) 위에서 구했듯이 X는 베르누이 분포를, y는 베타분포를 따른다. 서로가 서로에게 의존하도록 결합 비례 pdf를 적절히 조정하면
+### (1) 위에서 구했듯이 X|Y는 베르누이 분포를, y|X는 베타분포를 따른다. 따라서
 #### - 이항분포(n,y) : [(factorial(n)/(factorial(x)*(factorial(n-x))]*y^(x)*(1-y)^(n-x)
 #### - 베타분포(x-a, n-x+b) : K * y^(x-a-1)*(1-y)^(n-x+b-1) [단, k는 상수항으로서 간략화하였다]
 
