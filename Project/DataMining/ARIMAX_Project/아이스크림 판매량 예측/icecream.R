@@ -166,32 +166,3 @@ for (i in seq(1,4)){
 ((series[26:30,"cons"] - (series[25:29,"cons"] + final_vec))/series[26:30,"cons"])*100
 
 
-
-# 서울대 레퍼런스
-
-transf_frame <- data.frame(su1,su1res)
-
-auto.arima(su1.fit$residuals)
-
-
-su1res_fore <- predict(auto.arima(su1res),h=1)
-su1res_fore <- append(su1res, su1res_fore$pred[1])
-su1res_fore <- ts(su1res_fore,end = 2017)
-
-
-model1 <- auto.arima(cons_diff)
-## 2017년 값을 예측해준 후, 이를 cur_diff_fore 데이터셋에 담는다.
-cons_diff_fore <- predict(model1, h = 1)
-cons_diff_fore <- append(cons_diff, cons_diff_fore$pred[1])
-cons_diff_fore <- ts(cons_diff_fore, end = 2017)
-
-
-
-transf_fore <- data.frame(cons_diff_fore,su1res_fore)
-colnames(transf_fore) <- colnames(transf_frame[,2:3])
-
-final <- predict(su1.fit,xreg=transf_fore,n.ahead=1)
-
-cons[29] + diff(cons,differences=1)[28] + final$pred[1]
-
-(series[30,"cons"] - (cons[29] + diff(cons,differences=1)[28] + final$pred[1]))/series[30,"cons"]*100
