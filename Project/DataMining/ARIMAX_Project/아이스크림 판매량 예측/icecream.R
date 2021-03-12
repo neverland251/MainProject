@@ -92,6 +92,8 @@ ccf(Consumer,Temperature,lag.max = 30)
 
 su1 = ts.intersect(cons_seasonal,temp_seasonal)
 
+# arimax 모형을 가적합한다.
+
 su1.fit <- arimax(su1[,1],order=c(1,0,0),xtransf=su1[,2],transfer=list(c(5,0)),fixed=c(NA,NA,0,0,0,0,NA,NA))
 su1.fit
 su1res <- su1.fit$residuals
@@ -110,7 +112,7 @@ ccf(temp_diff,su1res)
 # 잔차는 단위근이 존재하지 않고, 서로 시계열적인 상관성도 없다. 즉, 모형은 잘 적합되었고 추가적인 선형필터 적합은 필요하지 않다.
 
 
-## 예측값 한차시 생성
+## 예측값 5차시 생성
 acf(temp,lag.max = 30)
 pacf(temp,lag.max = 30)
 
@@ -125,19 +127,25 @@ model1res <- model1$residuals
 
 acf(model1res)
 pacf(model1res)
-# 잔차는 완전한 백색잡음이다.
+# adf 테스트 결과 잔차엔 단위근이 없다
+# Box-Ljung 테스트 결과 잔차는 완전한 백색잡음이다.
 adf.test(model1res)
 Box.test(model1res,type="Ljung")
 
-## 모형은 잘 적합되었다.
+# 두 테스트 결과를 종합하면 단위근이 없으면서 완전한 백색잡음이므로, 모형은 잘 적합되었다.
 
+# 온도값의 5차시 예측값을 뽑는다.
 temp_fore <- predict(model1, n.ahead = 5)
+
+# 가적합된 모델의 계수를 가져와서 온도값의 5차시 예측값을 기반으로 판매량의 예측값을 산출한다.
 
 final <- su1.fit$coef[2] + su1.fit$coef[1] * cons_diff[24] - su1.fit$coef[7] * cons_diff[20] + su1.fit$coef[8] * temp_fore$pred[1]
 final_vec <- c(final)
 
 ytransf_i <- 20
 current_i <- 25
+
+# y 예측값을 자동으로 입력값으로 집어넣어 5차시 판매량 예측값을 뽑는 for문
 
 for (i in seq(1,4)){
   if (current_i - (ytransf_i + i) > 0){
